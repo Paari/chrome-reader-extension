@@ -1,0 +1,44 @@
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.rr-app {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  z-index: 9999999; /* to make sure it stays on top */
+}
+
+  .rr-app-wrapper {
+    background-color: #ffffff;
+    font-size: 18px;
+    line-height: 1.8;
+    color: #303030;
+    margin: 0 auto;
+  }
+
+    /* content styles */
+    .rr-content__wrapper {
+      padding: 25px;
+    }
+
+      /* heading styles */
+      .rr-app-wrapper h1,
+      .rr-app-wrapper h2,
+      .rr-app-wrapper h3,
+      .rr-app-wrapper h4,
+      .rr-app-wrapper h5,
+      .rr-app-wrapper h6 {
+        margin-top: 1em;
+        margin-bottom: .3em;
+      }
+      .rr-app-wrapper h1 {
+        font-size: 45px;
+        font-weight: normal;
+      }
+    
