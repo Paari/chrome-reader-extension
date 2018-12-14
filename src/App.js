@@ -8,6 +8,7 @@ class App extends Component {
     title: '',
     content: '',
     wrapperWidth: 800,
+    readerView: true,
   };
 
   componentWillMount() {
@@ -22,13 +23,29 @@ class App extends Component {
     })
   }
 
+  closeReader() {
+    this.setState({
+      readerView: false
+    })
+  }
+
   render() {
     return (
-      <div className="rr-app">
+      <div
+        className="rr-app"
+        style={{
+          display: this.state.readerView ? 'block' : 'none'
+        }}
+      >
         <section
           className="rr-app-wrapper"
           style={{width: `${this.state.wrapperWidth}px`}}
         >
+          <header className="rr-app-header">
+            <div className="rr-app-header__content">
+              <span onClick={() => this.closeReader()}>Close</span>
+            </div>
+          </header>
           <article className="rr-content__wrapper">
             <h1>{this.state.title}</h1>
             {ReactHtmlParser(this.state.content)}

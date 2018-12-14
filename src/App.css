@@ -21,6 +21,23 @@
     color: #303030;
     margin: 0 auto;
   }
+    
+    /* Config header style */
+    .rr-app-header {
+      position: fixed;
+      height: 70px;
+      width: 100%;
+      left: 0;
+      top: 0;
+      background-color: #ffffff;
+      border: 1px solid rgba(100,100,100,.1);
+    }
+      .rr-app-header__content {
+        height: 100%;
+        padding: 0 25px;
+        display: flex;
+        align-items: center;
+      }
 
     /* content styles */
     .rr-content__wrapper {
