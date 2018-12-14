@@ -11,6 +11,7 @@
   top: 0;
   left: 0;
   background-color: #ffffff;
+  animation: .5s ease-out slideFromBottom;
   z-index: 9999999; /* to make sure it stays on top */
 }
 
@@ -20,6 +21,7 @@
     line-height: 1.8;
     color: #303030;
     margin: 0 auto;
+    padding-top: 70px;
   }
     
     /* Config header style */
@@ -59,3 +61,20 @@
         font-weight: normal;
       }
     
+      /* Buttons */
+      .button--close {
+        padding: 10px;
+        cursor: pointer;
+      }
+
+
+@keyframes slideFromBottom {
+  0% {
+    transform: translateY(100%);
+    opacity: .3;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

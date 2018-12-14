@@ -12,11 +12,8 @@ class App extends Component {
   };
 
   componentWillMount() {
-    let page = document.getElementById('test');
-    let button = document.createElement('button');
     var documentClone = document.cloneNode(true); 
     var article = new Readability(documentClone).parse();
-    console.log(article.content);
     this.setState({
       title: article.title,
       content: article.content,
@@ -30,29 +27,30 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <div
-        className="rr-app"
-        style={{
-          display: this.state.readerView ? 'block' : 'none'
-        }}
-      >
-        <section
-          className="rr-app-wrapper"
-          style={{width: `${this.state.wrapperWidth}px`}}
+    if(this.state.readerView) {
+      return (
+        <div
+          className="rr-app"
         >
-          <header className="rr-app-header">
-            <div className="rr-app-header__content">
-              <span onClick={() => this.closeReader()}>Close</span>
-            </div>
-          </header>
-          <article className="rr-content__wrapper">
-            <h1>{this.state.title}</h1>
-            {ReactHtmlParser(this.state.content)}
-          </article>
-        </section>
-      </div>
-    );
+          <section
+            className="rr-app-wrapper"
+            style={{width: `${this.state.wrapperWidth}px`}}
+          >
+            <header className="rr-app-header">
+              <div className="rr-app-header__content">
+                <span className="button--close" onClick={() => this.closeReader()}>Close</span>
+              </div>
+            </header>
+            <article className="rr-content__wrapper">
+              <h1>{this.state.title}</h1>
+              {ReactHtmlParser(this.state.content)}
+            </article>
+          </section>
+        </div>
+      );
+    }
+
+    return null;
   }
 }
 
