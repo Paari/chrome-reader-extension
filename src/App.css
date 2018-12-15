@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Muli|Open+Sans');
+
 #root {
   width: 100%;
   height: 100%;
@@ -12,14 +14,21 @@
   left: 0;
   animation: .5s ease-out slideFromBottom;
   z-index: 9999999; /* to make sure it stays on top */
+  font-size: 18px;
 }
 
   .rr-app-wrapper {
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: 1em;
+    line-height: 1.7;
     margin: 0 auto;
     padding-top: 70px;
+    font-family: 'Open Sans', sans-serif;
   }
+    /* typography */
+    .rr-app-wrapper p {
+      font-size: 1em;
+      font-family: 'Open Sans', sans-serif;
+    }
     
     /* Config header style */
     .rr-app-header {
@@ -37,11 +46,20 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        font-size: 18px;
       }
 
     .rr-app-wrapper img {
       width: 100%;
       height: auto;
+    }
+
+    .rr-app-wrapper a {
+      color: #4e7de8
+    }
+    
+    .rr-app-wrapper a:hover {
+      color: #3d63b9
     }
 
     /* content styles */
@@ -58,9 +76,37 @@
       .rr-app-wrapper h6 {
         margin-top: 1em;
         margin-bottom: .3em;
+        line-height: 1.3;
+        font-family: 'Muli', sans-serif;
       }
       .rr-app-wrapper h1 {
-        font-size: 45px;
+        font-size: 2.5em;
+        font-family: 'Muli', sans-serif;
+        font-weight: normal;
+      }
+      .rr-app-wrapper h2 {
+        font-size: 2em;
+        font-family: 'Muli', sans-serif;
+        font-weight: normal;
+      }
+      .rr-app-wrapper h3 {
+        font-size: 1.77em;
+        font-family: 'Muli', sans-serif;
+        font-weight: normal;
+      }
+      .rr-app-wrapper h4 {
+        font-size: 1.55em;
+        font-family: 'Muli', sans-serif;
+        font-weight: normal;
+      }
+      .rr-app-wrapper h5 {
+        font-size: 1.33em;
+        font-family: 'Muli', sans-serif;
+        font-weight: normal;
+      }
+      .rr-app-wrapper h6 {
+        font-size: 1.22em;
+        font-family: 'Muli', sans-serif;
         font-weight: normal;
       }
 
@@ -100,13 +146,40 @@
   color: #303030;
   background-color: #ffffff;
 }
+  .theme-white p,
+  .theme-white h1,
+  .theme-white h2,
+  .theme-white h3,
+  .theme-white h4,
+  .theme-white h5,
+  .theme-white h6{
+    color: #303030;
+  }
 
 .theme-yellow {
   color: #303030;
   background-color: #f7f0e4;
 }
+  .theme-yellow p,
+  .theme-yellow h1,
+  .theme-yellow h2,
+  .theme-yellow h3,
+  .theme-yellow h4,
+  .theme-yellow h5,
+  .theme-yellow h6{
+    color: #303030;
+  }
 
 .theme-dark {
   color: #ffffff;
   background-color: #1c1f21;
 }
+  .theme-dark p,
+  .theme-dark h1,
+  .theme-dark h2,
+  .theme-dark h3,
+  .theme-dark h4,
+  .theme-dark h5,
+  .theme-dark h6{
+    color: #ffffff;
+  }
