@@ -9,6 +9,7 @@ class App extends Component {
     content: '',
     wrapperWidth: 800,
     readerView: true,
+    theme: 0,
   };
 
   componentWillMount() {
@@ -26,19 +27,36 @@ class App extends Component {
     })
   }
 
+  toggleTheme(themeIndex) {
+    this.setState({
+      theme: themeIndex,
+    })
+  }
+
   render() {
     if(this.state.readerView) {
+      let activeTheme = 'theme-white';
+      // if the theme is not white
+      if(this.state.theme > 0) {
+        activeTheme = this.state.theme === 1 ? 'theme-yellow' : 'theme-dark';
+      }
+
       return (
         <div
-          className="rr-app"
+          className={`rr-app ${activeTheme}`}
         >
           <section
             className="rr-app-wrapper"
             style={{width: `${this.state.wrapperWidth}px`}}
           >
-            <header className="rr-app-header">
+            <header className={`rr-app-header ${activeTheme}`}>
               <div className="rr-app-header__content">
-                <span className="button--close" onClick={() => this.closeReader()}>Close</span>
+                <span className="rr-button--close" onClick={() => this.closeReader()}>Close</span>
+                <div className="rr-theme--toggle">
+                  <span className="rr-theme--change theme-white" onClick={() => this.toggleTheme(0)}></span>
+                  <span className="rr-theme--change theme-yellow" onClick={() => this.toggleTheme(1)}></span>
+                  <span className="rr-theme--change theme-dark" onClick={() => this.toggleTheme(2)}></span>
+                </div>
               </div>
             </header>
             <article className="rr-content__wrapper">
