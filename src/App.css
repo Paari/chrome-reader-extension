@@ -14,7 +14,6 @@
   left: 0;
   animation: .5s ease-out slideFromBottom;
   z-index: 9999999; /* to make sure it stays on top */
-  font-size: 18px;
 }
 
   .rr-app-wrapper {
@@ -113,6 +112,38 @@
       .rr-theme--toggle {
         display: flex;
       }
+      .rr-font--update {
+        display: inline-block;
+        width: 30px;
+        font-weight: bold;
+        margin-right: 5px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 22px;
+        cursor: pointer;
+      }
+        .rr-font--update.dec {
+          font-size: 15px;
+        }
+        .rr-font--update.inc {
+          font-size: 22px;
+          margin-right: 20px;
+          position: relative;
+        }
+          .rr-font--update.inc::after {
+            content: '';
+            display: inline-block;
+            background-color: rgba(193, 193, 193, 0.4);
+            width: 1px;
+            height: 45px;
+            position: absolute;
+            right: -10px;
+            top: 0;
+          }
+
+
       .rr-theme--change {
         display: inline-block;
         width: 20px;

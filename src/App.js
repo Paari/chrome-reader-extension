@@ -10,6 +10,7 @@ class App extends Component {
     wrapperWidth: 800,
     readerView: true,
     theme: 0,
+    sizeFont: 18,
   };
 
   componentWillMount() {
@@ -44,6 +45,7 @@ class App extends Component {
       return (
         <div
           className={`rr-app ${activeTheme}`}
+          style={{fontSize: `${this.state.sizeFont}px`}}
         >
           <section
             className="rr-app-wrapper"
@@ -53,6 +55,9 @@ class App extends Component {
               <div className="rr-app-header__content">
                 <span className="rr-button--close" onClick={() => this.closeReader()}>Close</span>
                 <div className="rr-theme--toggle">
+                  <span className="rr-font--update dec" onClick={() => this.setState((state, props) => {return { sizeFont: state.sizeFont - 1 }})}>A</span>
+                  <span className="rr-font--update inc" onClick={() => this.setState((state, props) => {return { sizeFont: state.sizeFont + 1 }})}>A</span>
+
                   <span className="rr-theme--change theme-white" onClick={() => this.toggleTheme(0)}></span>
                   <span className="rr-theme--change theme-yellow" onClick={() => this.toggleTheme(1)}></span>
                   <span className="rr-theme--change theme-dark" onClick={() => this.toggleTheme(2)}></span>
