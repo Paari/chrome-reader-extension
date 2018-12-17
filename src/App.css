@@ -124,15 +124,15 @@
         line-height: 22px;
         cursor: pointer;
       }
-        .rr-font--update.dec {
+        .rr-font--update.rr-dec {
           font-size: 15px;
         }
-        .rr-font--update.inc {
+        .rr-font--update.rr-inc {
           font-size: 22px;
           margin-right: 20px;
           position: relative;
         }
-          .rr-font--update.inc::after {
+          .rr-font--update.rr-inc::after {
             content: '';
             display: inline-block;
             background-color: rgba(193, 193, 193, 0.4);

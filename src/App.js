@@ -23,8 +23,12 @@ class App extends Component {
       content: article.content,
     });
 
-    chrome.storage.sync.get('theme', (data) => {
-      this.setState({theme: data.theme});
+    chrome.storage.sync.get(['theme', 'sizeFont'], (data) => {
+      if(isNaN(data.sizeFont)) {
+        this.setState({theme: data.theme});
+      } else {
+        this.setState({theme: data.theme, sizeFont: data.sizeFont});
+      }
     })
   }
 
@@ -34,6 +38,26 @@ class App extends Component {
     });
   }
 
+  increaseFontSize() {
+    this.setState((state, props) => {
+      return { sizeFont: state.sizeFont + 1 }
+    });
+
+    this.saveFont(this.state.sizeFont);
+  }
+
+  decreaseFontSize() {
+    this.setState((state, props) => {
+      return { sizeFont: state.sizeFont - 1 }
+    });
+
+    this.saveFont(this.state.sizeFont);
+  }
+
+  /**
+   * Change the state of theme to update the view
+   * @param {number} themeIndex 
+   */
   toggleTheme(themeIndex) {
     this.setState({
       theme: themeIndex,
@@ -41,8 +65,20 @@ class App extends Component {
     this.saveTheme(themeIndex);
   }
 
-  saveTheme(themeIndex) {
-    chrome.storage.sync.set({theme: themeIndex});
+  /**
+   * Save the theme number to Chrome storage
+   * @param {number} theme 
+   */
+  saveTheme(theme) {
+    chrome.storage.sync.set({theme});
+  }
+
+  /**
+   * Save base font size to Chrome storage
+   * @param {number} sizeFont 
+   */
+  saveFont(sizeFont) {
+    chrome.storage.sync.set({sizeFont})
   }
 
   render() {
@@ -66,8 +102,8 @@ class App extends Component {
               <div className="rr-app-header__content">
                 <span className="rr-button--close" onClick={() => this.closeReader()}>Close</span>
                 <div className="rr-theme--toggle">
-                  <span className="rr-font--update dec" onClick={() => this.setState((state, props) => {return { sizeFont: state.sizeFont - 1 }})}>A</span>
-                  <span className="rr-font--update inc" onClick={() => this.setState((state, props) => {return { sizeFont: state.sizeFont + 1 }})}>A</span>
+                  <span className="rr-font--update rr-dec" onClick={() => this.decreaseFontSize()}>A</span>
+                  <span className="rr-font--update rr-inc" onClick={() => this.increaseFontSize()}>A</span>
 
                   <span className="rr-theme--change theme-white" onClick={() => this.toggleTheme(0)}></span>
                   <span className="rr-theme--change theme-yellow" onClick={() => this.toggleTheme(1)}></span>
