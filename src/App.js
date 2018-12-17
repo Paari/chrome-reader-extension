@@ -1,3 +1,5 @@
+/*global chrome*/
+
 import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import Readability from './libs/Readability';
@@ -19,19 +21,28 @@ class App extends Component {
     this.setState({
       title: article.title,
       content: article.content,
+    });
+
+    chrome.storage.sync.get('theme', (data) => {
+      this.setState({theme: data.theme});
     })
   }
 
   closeReader() {
     this.setState({
       readerView: false
-    })
+    });
   }
 
   toggleTheme(themeIndex) {
     this.setState({
       theme: themeIndex,
-    })
+    });
+    this.saveTheme(themeIndex);
+  }
+
+  saveTheme(themeIndex) {
+    chrome.storage.sync.set({theme: themeIndex});
   }
 
   render() {
