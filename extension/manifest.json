@@ -1,18 +1,18 @@
 {
-	"name": "Reader",
+	"name": "Reeader - Minimal reader for articles",
 	"version": "1.0.0",
-	"description": "Reading experience for chrome",
-  "permissions": ["activeTab", "declarativeContent", "storage"],
+	"description": "Simple and Minimal Reading Experience for Chrome",
+  "permissions": ["activeTab", "storage"],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
   },
   "browser_action": {},
   "icons": {
-    "16": "images/get_started16.png",
-    "32": "images/get_started32.png",
-    "48": "images/get_started48.png",
-    "128": "images/get_started128.png"
+    "16": "images/reader16.png",
+    "32": "images/reader32.png",
+    "48": "images/reader48.png",
+    "128": "images/reader128.png"
   },
 	"manifest_version": 2
 }
