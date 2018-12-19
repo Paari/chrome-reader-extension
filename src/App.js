@@ -96,7 +96,7 @@ class App extends Component {
         >
           <section
             className="rr-app-wrapper"
-            style={{width: `${this.state.wrapperWidth}px`}}
+            style={{maxWidth: `${this.state.wrapperWidth}px`}}
           >
             <header className={`rr-app-header ${activeTheme}`}>
               <div className="rr-app-header__content">

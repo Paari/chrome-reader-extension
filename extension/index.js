@@ -1,7 +1,7 @@
-let newNode = document.createElement('div');
-newNode.setAttribute("id", "root");
-
-//TODO: check if dom already contains root
-
-// add the node to the dom
-document.body.append(newNode);
+// check if dom already contains root
+if (document.getElementById('rr-root') === null) {
+  // add the node to the DOM
+  let newNode = document.createElement('div');
+  newNode.setAttribute("id", "rr-root");
+  document.body.append(newNode);
+}
