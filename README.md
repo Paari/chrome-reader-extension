@@ -10,10 +10,9 @@ Enable developer mode in Google Chrome and click on 'Load unpacked' and select t
 
 ## Development environment setup
 
+Make sure you are in `dev` branch by running `git checkout dev`.
+
 Run `npm install` to start the development server. The source code is in src folder and is powered by React.
 
 ### Updating the extension
-Run `npm run build` to generate the production code and do the following steps:
-1. Replace `extension/main.css` with `build/main.css`.
-2. Replace `extension/main.js` with `build/static/js/main.[hash].js` after renaming it to `main.js`.
-3. Refresh the extension.
+Run `npm run build` to generate the production code and refresh the extension.
