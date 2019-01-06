@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import Readability from './libs/Readability';
 import './App.css';
+import Popup from './component/popup';
 
 class App extends Component {
   state = {
@@ -13,6 +14,7 @@ class App extends Component {
     readerView: true,
     theme: 0,
     sizeFont: 18,
+    lineHeight: 1.6,
   };
 
   componentWillMount() {
@@ -23,12 +25,14 @@ class App extends Component {
       content: article.content,
     });
 
-    chrome.storage.sync.get(['theme', 'sizeFont'], (data) => {
-      if(isNaN(data.sizeFont)) {
-        this.setState({theme: data.theme});
-      } else {
-        this.setState({theme: data.theme, sizeFont: data.sizeFont});
-      }
+    chrome.storage.sync.get(['theme', 'sizeFont', 'lineHeight'], (data) => {
+      this.setState((state) => {
+        return {
+          theme: isNaN(data.theme) ? state.theme : data.theme,
+          sizeFont: isNaN(data.sizeFont) ? state.sizeFont : data.sizeFont,
+          lineHeight: isNaN(data.lineHeight) ? state.lineHeight : data.lineHeight,
+        }
+      })
     })
   }
 
@@ -39,7 +43,7 @@ class App extends Component {
   }
 
   increaseFontSize() {
-    this.setState((state, props) => {
+    this.setState((state) => {
       return { sizeFont: state.sizeFont + 1 }
     });
 
@@ -47,7 +51,7 @@ class App extends Component {
   }
 
   decreaseFontSize() {
-    this.setState((state, props) => {
+    this.setState((state) => {
       return { sizeFont: state.sizeFont - 1 }
     });
 
@@ -66,6 +70,26 @@ class App extends Component {
   }
 
   /**
+   * Increase or decrease line height
+   * True: increase line height by 0.1
+   * False: decrease line height by 0.1
+   * @param {boolean} action 
+   */
+  editLineHeight(action) {
+    if(action) {
+      this.setState((state) => {
+        return { lineHeight: state.lineHeight + 0.1 }
+      });
+    } else {
+      this.setState((state) => {
+        return { lineHeight: state.lineHeight - 0.1 }
+      });
+    }
+
+    this.saveLineHeight(this.state.lineHeight);
+  }
+
+  /**
    * Save the theme number to Chrome storage
    * @param {number} theme 
    */
@@ -78,7 +102,15 @@ class App extends Component {
    * @param {number} sizeFont 
    */
   saveFont(sizeFont) {
-    chrome.storage.sync.set({sizeFont})
+    chrome.storage.sync.set({sizeFont});
+  }
+
+  /**
+   * Save line height to Chrome storage
+   * @param {number} lineHeight 
+   */
+  saveLineHeight(lineHeight) {
+    chrome.storage.sync.set({lineHeight});
   }
 
   render() {
@@ -104,6 +136,10 @@ class App extends Component {
                 <div className="rr-theme--toggle">
                   <span className="rr-font--update rr-dec" onClick={() => this.decreaseFontSize()}>A</span>
                   <span className="rr-font--update rr-inc" onClick={() => this.increaseFontSize()}>A</span>
+                  <div className="rr-popup-toggle__wrapper">
+                    <span className="rr-popup-toggle--button" onClick={() => this.increaseFontSize()}>|||</span>
+                    <Popup editLineHeight={(action) => this.editLineHeight(action)} />
+                  </div>
 
                   <span className="rr-theme--change theme-white" onClick={() => this.toggleTheme(0)}></span>
                   <span className="rr-theme--change theme-yellow" onClick={() => this.toggleTheme(1)}></span>
@@ -111,7 +147,10 @@ class App extends Component {
                 </div>
               </div>
             </header>
-            <article className="rr-content__wrapper">
+            <article 
+              className="rr-content__wrapper"
+              style={{lineHeight: `${this.state.lineHeight}em`}}
+            >
               <h1>{this.state.title}</h1>
               {ReactHtmlParser(this.state.content)}
             </article>

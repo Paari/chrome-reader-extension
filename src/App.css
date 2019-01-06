@@ -17,8 +17,6 @@
 }
 
   .rr-app-wrapper {
-    font-size: 1em;
-    line-height: 1.7;
     margin: 0 auto;
     padding-top: 70px;
     font-family: 'Open Sans', sans-serif;
@@ -39,6 +37,7 @@
       border-bottom: 1px solid rgba(193, 193, 193, 0.2);
     }
       .rr-app-header__content {
+        background-color: inherit;
         height: 100%;
         padding: 0 25px;
         display: flex;
@@ -64,6 +63,7 @@
     /* content styles */
     .rr-content__wrapper {
       padding: 25px;
+      font-size: 1em;
     }
 
       /* heading styles */
@@ -75,7 +75,6 @@
       .rr-app-wrapper h6 {
         margin-top: 1em;
         margin-bottom: .3em;
-        line-height: 1.3;
         font-family: 'Muli', sans-serif;
       }
       .rr-app-wrapper h1 {
@@ -111,6 +110,7 @@
 
       .rr-theme--toggle {
         display: flex;
+        background-color: inherit;
       }
       .rr-font--update {
         display: inline-block;
@@ -160,6 +160,34 @@
         cursor: pointer;
       }
 
+/* popup style */
+.rr-popup-toggle__wrapper {
+  position: relative;
+  background-color: inherit;
+}
+.rr-popup__wrapper {
+  position: absolute;
+  min-width: 120px;
+  top: 100%;
+  right: 0;
+  background-color: inherit;
+  box-shadow: -3px 8px 15px rgba(0,0,0,.2);
+  border-radius: 5px 0 5px 5px;
+  padding: 25px 10px;
+}
+
+  .rr-popup__control {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    background: #3d63b9;
+    margin-right: 8px;
+  }
+
+  .rr-popup__wrapper h5 {
+    font-size: 16px;
+  }
 
 @keyframes slideFromBottom {
   0% {
@@ -198,7 +226,8 @@
   .theme-yellow h4,
   .theme-yellow h5,
   .theme-yellow h6{
-    color: #303030;
+    /* make sure that the site styles are not applied for the color of heading*/
+    color: #303030 !important;
   }
 
 .theme-dark {
@@ -213,4 +242,6 @@
   .theme-dark h5,
   .theme-dark h6{
     color: #ffffff;
+    /* make sure that the site styles are not applied for the color of heading*/
+    color: #ffffff !important;
   }
