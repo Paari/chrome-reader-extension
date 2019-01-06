@@ -176,6 +176,23 @@
   padding: 25px 10px;
 }
 
+  .rr-popup-toggle--button {
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0 15px;
+  }
+
+    .rr-popup-toggle--button figure {
+      width: 6px;
+      height: 6px;
+      border-radius: 5px;
+      background: #303030;
+      margin: 3px 0;
+    }
+
   .rr-popup__control {
     display: inline-block;
     width: 25px;

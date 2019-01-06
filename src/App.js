@@ -15,6 +15,7 @@ class App extends Component {
     theme: 0,
     sizeFont: 18,
     lineHeight: 1.6,
+    popupMenu: false,
   };
 
   componentWillMount() {
@@ -67,6 +68,13 @@ class App extends Component {
       theme: themeIndex,
     });
     this.saveTheme(themeIndex);
+  }
+
+  // open and close popup options
+  togglePopup() {
+    this.setState((state) => {
+      return { popupMenu: !state.popupMenu }
+    })
   }
 
   /**
@@ -136,14 +144,18 @@ class App extends Component {
                 <div className="rr-theme--toggle">
                   <span className="rr-font--update rr-dec" onClick={() => this.decreaseFontSize()}>A</span>
                   <span className="rr-font--update rr-inc" onClick={() => this.increaseFontSize()}>A</span>
-                  <div className="rr-popup-toggle__wrapper">
-                    <span className="rr-popup-toggle--button" onClick={() => this.increaseFontSize()}>|||</span>
-                    <Popup editLineHeight={(action) => this.editLineHeight(action)} />
-                  </div>
 
                   <span className="rr-theme--change theme-white" onClick={() => this.toggleTheme(0)}></span>
                   <span className="rr-theme--change theme-yellow" onClick={() => this.toggleTheme(1)}></span>
                   <span className="rr-theme--change theme-dark" onClick={() => this.toggleTheme(2)}></span>
+                  <div className="rr-popup-toggle__wrapper">
+                    <div className="rr-popup-toggle--button" onClick={() => this.togglePopup()}>
+                      <figure></figure>
+                      <figure></figure>
+                      <figure></figure>
+                    </div>
+                    {this.state.popupMenu && <Popup editLineHeight={(action) => this.editLineHeight(action)} />}
+                  </div>
                 </div>
               </div>
             </header>
