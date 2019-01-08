@@ -262,3 +262,39 @@
     /* make sure that the site styles are not applied for the color of heading*/
     color: #ffffff !important;
   }
+
+
+/* speed reading style */
+.rr-speed .rr-content__wrapper > div {
+  position: relative;
+}
+
+.rr-speed .rr-content__wrapper {
+  text-align: justify;
+}
+
+.rr-speed .rr-content__wrapper > div:after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-left: 50px solid;
+  border-right: 50px solid;
+  box-sizing: border-box;
+}
+
+.rr-speed.theme-white .rr-content__wrapper > div:after {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.rr-speed.theme-yellow .rr-content__wrapper > div:after {
+  border-color: rgba(247, 240, 228, 0.8);
+}
+
+.rr-speed.theme-dark .rr-content__wrapper > div:after {
+  border-color: rgba(28, 31, 33, 0.8);
+}

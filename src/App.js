@@ -16,6 +16,7 @@ class App extends Component {
     sizeFont: 18,
     lineHeight: 1.6,
     popupMenu: false,
+    speedReading: false,
   };
 
   componentWillMount() {
@@ -97,6 +98,14 @@ class App extends Component {
     this.saveLineHeight(this.state.lineHeight);
   }
 
+  toggleSpeedReading() {
+    this.setState((state) => {
+      return {
+        speedReading: !state.speedReading
+      }
+    })
+  }
+
   /**
    * Save the theme number to Chrome storage
    * @param {number} theme 
@@ -131,7 +140,7 @@ class App extends Component {
 
       return (
         <div
-          className={`rr-app ${activeTheme}`}
+          className={`rr-app ${activeTheme} ${this.state.speedReading ? 'rr-speed' : ''}`}
           style={{fontSize: `${this.state.sizeFont}px`}}
         >
           <section
@@ -142,6 +151,9 @@ class App extends Component {
               <div className="rr-app-header__content">
                 <span className="rr-button--close" onClick={() => this.closeReader()}>Close</span>
                 <div className="rr-theme--toggle">
+                  <button onClick={() => this.toggleSpeedReading()}>
+                    Speed Reading
+                  </button>
                   <span className="rr-font--update rr-dec" onClick={() => this.decreaseFontSize()}>A</span>
                   <span className="rr-font--update rr-inc" onClick={() => this.increaseFontSize()}>A</span>
 
