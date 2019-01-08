@@ -1,6 +1,6 @@
 {
 	"name": "Reeader - Minimal reader for articles",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Simple and Minimal Reading Experience for Chrome",
   "permissions": ["activeTab", "storage"],
   "background": {
