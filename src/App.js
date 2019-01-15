@@ -171,7 +171,7 @@ class App extends Component {
                       <figure></figure>
                       <figure></figure>
                     </div>
-                    {this.state.popupMenu && <Popup editLineHeight={(action) => this.editLineHeight(action)} />}
+                    {this.state.popupMenu && <Popup theme={this.state.theme} editLineHeight={(action) => this.editLineHeight(action)} />}
                   </div>
                 </div>
               </div>

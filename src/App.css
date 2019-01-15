@@ -178,8 +178,13 @@
   background-color: inherit;
   box-shadow: -3px 8px 15px rgba(0,0,0,.2);
   border-radius: 5px 0 5px 5px;
-  padding: 25px 10px;
+  padding: 10px 10px 25px;
 }
+
+  .dr-popup--label {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
 
   .rr-popup-toggle--button {
     position: relative;
@@ -198,12 +203,15 @@
       margin: 3px 0;
     }
 
+    .theme-dark .rr-popup-toggle--button figure {
+      background: #ffffff;
+    }
+
   .rr-popup__control {
     display: inline-block;
     width: 25px;
     height: 25px;
     line-height: 25px;
-    background: #3d63b9;
     margin-right: 8px;
   }
 
@@ -334,6 +342,7 @@ img.dr-icons {
   height: none;
   box-shadow: none;
   text-align: center;
+  cursor: pointer;
 }
 
 .dr-speed--toggle {
