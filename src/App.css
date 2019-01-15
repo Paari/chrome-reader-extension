@@ -35,6 +35,7 @@
       left: 0;
       top: 0;
       border-bottom: 1px solid rgba(193, 193, 193, 0.2);
+      z-index: 10;
     }
       .rr-app-header__content {
         background-color: inherit;
@@ -47,7 +48,9 @@
         font-size: 18px;
       }
 
-    .rr-app-wrapper img {
+    .rr-app-wrapper img,
+    .rr-app-wrapper video,
+    .rr-app-wrapper iframe {
       width: 100%;
       height: auto;
     }
@@ -75,6 +78,7 @@
       .rr-app-wrapper h6 {
         margin-top: 1em;
         margin-bottom: .3em;
+        line-height: 1.3;
         font-family: 'Muli', sans-serif;
       }
       .rr-app-wrapper h1 {
@@ -111,6 +115,7 @@
       .rr-theme--toggle {
         display: flex;
         background-color: inherit;
+        align-items: center;
       }
       .rr-font--update {
         display: inline-block;
@@ -285,7 +290,24 @@
   border-left: 50px solid;
   border-right: 50px solid;
   box-sizing: border-box;
+  pointer-events: none;
 }
+
+  /* images and headings should not have the speed reading cut */
+  .rr-speed h1,
+  .rr-speed h2,
+  .rr-speed h3,
+  .rr-speed h4,
+  .rr-speed h5,
+  .rr-speed h6,
+  .rr-speed img,
+  .rr-speed video,
+  .rr-speed iframe,
+  .rr-speed table {
+    z-index: 1;
+    position: relative;
+    text-align: left;
+  }
 
 .rr-speed.theme-white .rr-content__wrapper > div:after {
   border-color: rgba(255, 255, 255, 0.8);
@@ -298,3 +320,28 @@
 .rr-speed.theme-dark .rr-content__wrapper > div:after {
   border-color: rgba(28, 31, 33, 0.8);
 }
+
+/* icons */
+img.dr-icons {
+  width: 32px;
+  height: 32px;
+}
+
+.dr-button--action {
+  background: transparent;
+  border: 0;
+  outline: none;
+  height: none;
+  box-shadow: none;
+  text-align: center;
+}
+
+.dr-speed--toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+  .dr-speed--toggle.dr-active {
+    background: rgba(78, 125, 232, 0.32);
+  }

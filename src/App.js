@@ -138,6 +138,8 @@ class App extends Component {
         activeTheme = this.state.theme === 1 ? 'theme-yellow' : 'theme-dark';
       }
 
+      const speedIcon = this.state.theme === 2 ? chrome.runtime.getURL('images/icon-speed-light.png') : chrome.runtime.getURL('images/icon-speed.png');
+
       return (
         <div
           className={`rr-app ${activeTheme} ${this.state.speedReading ? 'rr-speed' : ''}`}
@@ -151,9 +153,12 @@ class App extends Component {
               <div className="rr-app-header__content">
                 <span className="rr-button--close" onClick={() => this.closeReader()}>Close</span>
                 <div className="rr-theme--toggle">
-                  <button onClick={() => this.toggleSpeedReading()}>
-                    Speed Reading
-                  </button>
+                  <span
+                    onClick={() => this.toggleSpeedReading()}
+                    className={this.state.speedReading ? "dr-button--action dr-active dr-speed--toggle" : "dr-button--action dr-speed--toggle"}
+                  >
+                    <img src={speedIcon} className="dr-icons" title="Speed Reading" />
+                  </span>
                   <span className="rr-font--update rr-dec" onClick={() => this.decreaseFontSize()}>A</span>
                   <span className="rr-font--update rr-inc" onClick={() => this.increaseFontSize()}>A</span>
 

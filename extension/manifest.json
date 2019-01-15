@@ -14,5 +14,8 @@
     "48": "images/reader48.png",
     "128": "images/reader128.png"
   },
-	"manifest_version": 2
+  "manifest_version": 2,
+  "web_accessible_resources": [
+    "images/*.png"
+  ]
 }
