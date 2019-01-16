@@ -1,6 +1,8 @@
 # Google Chrome reader extension
 
-The extension is under development and will soon be available on Chrome store.
+Download the [Reeader extension for Google chrome](https://chrome.google.com/webstore/detail/reeader-minimal-reader-fo/jblbdklppkompnbobkpncbmbjkaeaeah).
+
+![Chrome extensions tab](./screenshot.jpg)
 
 ## Running extension in development mode
 
