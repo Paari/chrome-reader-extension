@@ -178,12 +178,16 @@
   background-color: inherit;
   box-shadow: -3px 8px 15px rgba(0,0,0,.2);
   border-radius: 5px 0 5px 5px;
-  padding: 10px 10px 25px;
+  padding: 10px 10px 0;
 }
 
-  .dr-popup--label {
+  h5.dr-popup--label {
     font-size: 14px;
+    opacity: 0.4;
     letter-spacing: 1px;
+
+    /* overwrite style */
+    margin-top: 10px !important;
   }
 
   .rr-popup-toggle--button {
@@ -333,6 +337,12 @@
 img.dr-icons {
   width: 32px;
   height: 32px;
+}
+
+.rr-popup__action-wrapper {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,.1);
 }
 
 .dr-button--action {

@@ -25,6 +25,10 @@ export default class Popup extends Component {
             <img src={incLineHeightIcon} title="Increase line height" />
           </span>
         </div>
+
+        <div className="rr-popup__action-wrapper">
+          <img src={incLineHeightIcon} src={chrome.runtime.getURL('images/logo.png')} />
+        </div>
       </div>
     )
   }
