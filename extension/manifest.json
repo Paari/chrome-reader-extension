@@ -1,7 +1,7 @@
 {
-	"name": "Reeader - Minimal reader for articles",
-	"version": "1.0.1",
-	"description": "Building the best reading experience for the web.",
+	"name": "Reeader - Better reading experience",
+	"version": "1.1.0",
+	"description": "Creating the best reading experience for the web.",
   "permissions": ["activeTab", "storage"],
   "background": {
     "scripts": ["background.js"],
