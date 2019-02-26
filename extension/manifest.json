@@ -1,7 +1,7 @@
 {
-	"name": "Reeader - Better reading experience",
-	"version": "1.1.0",
-	"description": "Creating the best reading experience for the web.",
+	"name": "Reeader - Minimal reader with speed reading",
+	"version": "1.1.1",
+	"description": "A simple and minimal way to read articles faster.",
   "permissions": ["activeTab", "storage"],
   "background": {
     "scripts": ["background.js"],
