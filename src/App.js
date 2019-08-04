@@ -1,4 +1,5 @@
 /*global chrome*/
+/*global document*/
 
 import React, { Component } from 'react';
 import ReactHtmlParser from 'react-html-parser';
@@ -42,6 +43,10 @@ class App extends Component {
     this.setState({
       readerView: false
     });
+
+    // remove scroll stop style from body
+    const bodyElement = document.getElementsByTagName('body')
+    bodyElement[0].removeAttribute('style');
   }
 
   increaseFontSize() {
