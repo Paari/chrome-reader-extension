@@ -24,8 +24,13 @@
     /* typography */
     .rr-app-wrapper p {
       font-size: 1em;
+      font-weight: 600;
       font-family: 'Open Sans', sans-serif;
     }
+
+      .rr-app-wrapper p span.rr-fade {
+        opacity: 0.2;
+      }
     
     /* Config header style */
     .rr-app-header {
