@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import ReactHtmlParser from "react-html-parser";
 import Readability from "./libs/Readability";
 import "./App.css";
-import Popup from "./component/popup";
+import Popup from "./component/Popup";
 import { fadeStopWords } from "./helpers/fadeStopWords";
 
 class App extends Component {
@@ -17,6 +17,7 @@ class App extends Component {
     theme: 0,
     sizeFont: 18,
     lineHeight: 1.6,
+    fontWeight: 400,
     popupMenu: false,
     speedReading: false
   };
@@ -30,14 +31,18 @@ class App extends Component {
       content: fadeStopWords(article.content)
     });
 
-    chrome.storage.sync.get(["theme", "sizeFont", "lineHeight"], data => {
+    // load saved values from chrome storage
+    chrome.storage.sync.get(["theme", "sizeFont", "lineHeight", "fontWeight"], data => {
       this.setState(state => {
         return {
           theme: isNaN(data.theme) ? state.theme : data.theme,
           sizeFont: isNaN(data.sizeFont) ? state.sizeFont : data.sizeFont,
           lineHeight: isNaN(data.lineHeight)
             ? state.lineHeight
-            : data.lineHeight
+            : data.lineHeight,
+          fontWeight: isNaN(data.fontWeight)
+            ? state.fontWeight
+            : data.fontWeight
         };
       });
     });
@@ -116,6 +121,21 @@ class App extends Component {
   }
 
   /**
+   * Should it be bold or not
+   * it just toggles values
+   */
+  toggleFontWeight() {
+    this.setState(prevState => {
+      const status = prevState.fontWeight === 600;
+      const fontWeightValue = status ? 400 : 600;
+      this.saveFontWeight(fontWeightValue); // save to chrom storage
+      return {
+        fontWeight: fontWeightValue
+      };
+    });
+  }
+
+  /**
    * Save the theme number to Chrome storage
    * @param {number} theme
    */
@@ -139,6 +159,14 @@ class App extends Component {
     chrome.storage.sync.set({ lineHeight });
   }
 
+  /**
+   * Save font weight to Chrome storage
+   * @param {number} fontWeight
+   */
+  saveFontWeight(fontWeight) {
+    chrome.storage.sync.set({ fontWeight });
+  }
+
   render() {
     if (this.state.readerView) {
       let activeTheme = "theme-white";
@@ -157,7 +185,6 @@ class App extends Component {
           className={`rr-app ${activeTheme} ${
             this.state.speedReading ? "rr-speed" : ""
           }`}
-          style={{ fontSize: `${this.state.sizeFont}px` }}
         >
           <section
             className="rr-app-wrapper"
@@ -224,6 +251,8 @@ class App extends Component {
                       <Popup
                         theme={this.state.theme}
                         editLineHeight={action => this.editLineHeight(action)}
+                        toggleFontWeight={() => this.toggleFontWeight()}
+                        fontWeight={this.state.fontWeight === 600}
                       />
                     )}
                   </div>
@@ -232,7 +261,11 @@ class App extends Component {
             </header>
             <article
               className="rr-content__wrapper"
-              style={{ lineHeight: `${this.state.lineHeight}em` }}
+              style={{
+                fontSize: `${this.state.sizeFont}px`,
+                lineHeight: `${this.state.lineHeight}em`,
+                fontWeight: this.state.fontWeight
+              }}
             >
               <h1>{this.state.title}</h1>
               {ReactHtmlParser(this.state.content)}

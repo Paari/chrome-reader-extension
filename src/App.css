@@ -24,7 +24,6 @@
     /* typography */
     .rr-app-wrapper p {
       font-size: 1em;
-      font-weight: 600;
       font-family: 'Open Sans', sans-serif;
     }
 
@@ -56,7 +55,8 @@
     .rr-app-wrapper img,
     .rr-app-wrapper video,
     .rr-app-wrapper iframe {
-      width: 100%;
+      max-width: 100%;
+      width: auto;
       height: auto;
     }
 
@@ -177,11 +177,11 @@
 }
 .rr-popup__wrapper {
   position: absolute;
-  min-width: 120px;
+  min-width: 175px;
   top: 100%;
   right: 0;
   background-color: inherit;
-  box-shadow: -3px 8px 15px rgba(0,0,0,.2);
+  box-shadow: -3px 25px 35px -5px rgba(0,0,0,0.3);
   border-radius: 5px 0 5px 5px;
   padding: 10px 10px 0;
 }
@@ -223,6 +223,21 @@
     line-height: 25px;
     margin-right: 8px;
   }
+
+  .rr-popup__toggle {
+    display: block;
+    font-size: 14px;
+    background-color: transparent;
+    transition: 0.3s;
+    text-align: left;
+    padding: 5px 0;
+    cursor: pointer;
+  }
+    .rr-popup__toggle.active {
+      background-color: #4e7de8;
+      color: #ffffff;
+      text-align: center;
+    }
 
   .rr-popup__wrapper h5 {
     font-size: 16px;
