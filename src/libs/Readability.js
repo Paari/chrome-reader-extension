@@ -39,6 +39,7 @@ function Readability(doc, options) {
   this._articleTitle = null;
   this._articleByline = null;
   this._articleDir = null;
+  this._articleSiteName = null;
   this._attempts = [];
 
   // Configurable options
@@ -47,6 +48,7 @@ function Readability(doc, options) {
   this._nbTopCandidates = options.nbTopCandidates || this.DEFAULT_N_TOP_CANDIDATES;
   this._charThreshold = options.charThreshold || this.DEFAULT_CHAR_THRESHOLD;
   this._classesToPreserve = this.CLASSES_TO_PRESERVE.concat(options.classesToPreserve || []);
+  this._keepClasses = !!options.keepClasses;
 
   // Start with all flags set
   this._flags = this.FLAG_STRIP_UNLIKELYS |
@@ -70,7 +72,7 @@ function Readability(doc, options) {
         elDesc = "(" + classDesc + ")";
       return rv + elDesc;
     };
-    this.log = function (dump) {
+    this.log = function () {
       if (typeof dump !== "undefined") {
         var msg = Array.prototype.map.call(arguments, function(x) {
           return (x && x.nodeName) ? logEl(x) : x;
@@ -111,15 +113,19 @@ Readability.prototype = {
   // All of the regular expressions in use within readability.
   // Defined up here so we don't instantiate them repeatedly in loops.
   REGEXPS: {
-    unlikelyCandidates: /-ad-|banner|breadcrumbs|combx|comment|community|cover-wrap|disqus|extra|foot|header|legends|menu|related|remark|replies|rss|shoutbox|sidebar|skyscraper|social|sponsor|supplemental|ad-break|agegate|pagination|pager|popup|yom-remote/i,
-    okMaybeItsACandidate: /and|article|body|column|main|shadow/i,
+    // NOTE: These two regular expressions are duplicated in
+    // Readability-readerable.js. Please keep both copies in sync.
+    unlikelyCandidates: /-ad-|ai2html|banner|breadcrumbs|combx|comment|community|cover-wrap|disqus|extra|footer|gdpr|header|legends|menu|related|remark|replies|rss|shoutbox|sidebar|skyscraper|social|sponsor|supplemental|ad-break|agegate|pagination|pager|popup|yom-remote/i,
+    okMaybeItsACandidate: /and|article|body|column|content|main|shadow/i,
+
     positive: /article|body|content|entry|hentry|h-entry|main|page|pagination|post|text|blog|story/i,
-    negative: /hidden|^hid$| hid$| hid |^hid |banner|combx|comment|com-|contact|foot|footer|footnote|masthead|media|meta|outbrain|promo|related|scroll|share|shoutbox|sidebar|skyscraper|sponsor|shopping|tags|tool|widget/i,
+    negative: /hidden|^hid$| hid$| hid |^hid |banner|combx|comment|com-|contact|foot|footer|footnote|gdpr|masthead|media|meta|outbrain|promo|related|scroll|share|shoutbox|sidebar|skyscraper|sponsor|shopping|tags|tool|widget/i,
     extraneous: /print|archive|comment|discuss|e[\-]?mail|share|reply|all|login|sign|single|utility/i,
     byline: /byline|author|dateline|writtenby|p-author/i,
     replaceFonts: /<(\/?)font[^>]*>/gi,
     normalize: /\s{2,}/g,
     videos: /\/\/(www\.)?((dailymotion|youtube|youtube-nocookie|player\.vimeo|v\.qq)\.com|(archive|upload\.wikimedia)\.org|player\.twitch\.tv)/i,
+    shareElements: /(\b|_)(share|sharedaddy)(\b|_)/i,
     nextLink: /(next|weiter|continue|>([^\|]|$)|»([^\|]|$))/i,
     prevLink: /(prev|earl|old|new|<|«)/i,
     whitespace: /^\s*$/,
@@ -158,8 +164,10 @@ Readability.prototype = {
     // Readability cannot open relative uris so we convert them to absolute uris.
     this._fixRelativeUris(articleContent);
 
-    // Remove classes.
-    this._cleanClasses(articleContent);
+    if (!this._keepClasses) {
+      // Remove classes.
+      this._cleanClasses(articleContent);
+    }
   },
 
   /**
@@ -320,7 +328,7 @@ Readability.prototype = {
       return uri;
     }
 
-    var links = articleContent.getElementsByTagName("a");
+    var links = this._getAllNodesWithTag(articleContent, ["a"]);
     this._forEachNode(links, function(link) {
       var href = link.getAttribute("href");
       if (href) {
@@ -335,7 +343,7 @@ Readability.prototype = {
       }
     });
 
-    var imgs = articleContent.getElementsByTagName("img");
+    var imgs = this._getAllNodesWithTag(articleContent, ["img"]);
     this._forEachNode(imgs, function(img) {
       var src = img.getAttribute("src");
       if (src) {
@@ -408,7 +416,7 @@ Readability.prototype = {
         curTitle = this._getInnerText(hOnes[0]);
     }
 
-    curTitle = curTitle.trim();
+    curTitle = curTitle.trim().replace(this.REGEXPS.normalize, " ");
     // If we now have 4 words or fewer as our title, and either no
     // 'hierarchical' separators (\, /, > or ») were found in the original
     // title or we decreased the number of words by more than 1 word, use
@@ -534,7 +542,16 @@ Readability.prototype = {
       replacement.readability = node.readability;
 
     for (var i = 0; i < node.attributes.length; i++) {
-      replacement.setAttribute(node.attributes[i].name, node.attributes[i].value);
+      try {
+        replacement.setAttribute(node.attributes[i].name, node.attributes[i].value);
+      } catch (ex) {
+        /* it's possible for setAttribute() to throw if the attribute name
+         * isn't a valid XML Name. Such attributes can however be parsed from
+         * source in HTML docs, see https://github.com/whatwg/html/issues/4275,
+         * so we can hit them here and then throw. We don't care about such
+         * attributes so we ignore them.
+         */
+      }
     }
     return replacement;
   },
@@ -554,6 +571,8 @@ Readability.prototype = {
     // visually linked to other content-ful elements (text, images, etc.).
     this._markDataTables(articleContent);
 
+    this._fixLazyImages(articleContent);
+
     // Clean out junk from the article content
     this._cleanConditionally(articleContent, "form");
     this._cleanConditionally(articleContent, "fieldset");
@@ -564,10 +583,15 @@ Readability.prototype = {
     this._clean(articleContent, "link");
     this._clean(articleContent, "aside");
 
-    // Clean out elements have "share" in their id/class combinations from final top candidates,
+    // Clean out elements with little content that have "share" in their id/class combinations from final top candidates,
     // which means we don't remove the top candidates even they have "share".
-    this._forEachNode(articleContent.children, function(topCandidate) {
-      this._cleanMatchedNodes(topCandidate, /share/);
+
+    var shareElementThreshold = this.DEFAULT_CHAR_THRESHOLD;
+
+    this._forEachNode(articleContent.children, function (topCandidate) {
+      this._cleanMatchedNodes(topCandidate, function (node, matchString) {
+        return this.REGEXPS.shareElements.test(matchString) && node.textContent.length < shareElementThreshold;
+      });
     });
 
     // If there is only one h2 and its text content substantially equals article title,
@@ -718,9 +742,10 @@ Readability.prototype = {
 
     if (node.getAttribute !== undefined) {
       var rel = node.getAttribute("rel");
+      var itemprop = node.getAttribute("itemprop");
     }
 
-    if ((rel === "author" || this.REGEXPS.byline.test(matchString)) && this._isValidByline(node.textContent)) {
+    if ((rel === "author" || (itemprop && itemprop.indexOf("author") !== -1) || this.REGEXPS.byline.test(matchString)) && this._isValidByline(node.textContent)) {
       this._articleByline = node.textContent.trim();
       return true;
     }
@@ -789,6 +814,7 @@ Readability.prototype = {
         if (stripUnlikelyCandidates) {
           if (this.REGEXPS.unlikelyCandidates.test(matchString) &&
               !this.REGEXPS.okMaybeItsACandidate.test(matchString) &&
+              !this._hasAncestorTag(node, "table") &&
               node.tagName !== "BODY" &&
               node.tagName !== "A") {
             this.log("Removing unlikely candidate - " + matchString);
@@ -1199,16 +1225,19 @@ Readability.prototype = {
     var metaElements = this._doc.getElementsByTagName("meta");
 
     // property is a space-separated list of values
-    var propertyPattern = /\s*(dc|dcterm|og|twitter)\s*:\s*(author|creator|description|title)\s*/gi;
+    var propertyPattern = /\s*(dc|dcterm|og|twitter)\s*:\s*(author|creator|description|title|site_name)\s*/gi;
 
     // name is a single value
-    var namePattern = /^\s*(?:(dc|dcterm|og|twitter|weibo:(article|webpage))\s*[\.:]\s*)?(author|creator|description|title)\s*$/i;
+    var namePattern = /^\s*(?:(dc|dcterm|og|twitter|weibo:(article|webpage))\s*[\.:]\s*)?(author|creator|description|title|site_name)\s*$/i;
 
     // Find description tags.
     this._forEachNode(metaElements, function(element) {
       var elementName = element.getAttribute("name");
       var elementProperty = element.getAttribute("property");
       var content = element.getAttribute("content");
+      if (!content) {
+        return;
+      }
       var matches = null;
       var name = null;
 
@@ -1261,6 +1290,9 @@ Readability.prototype = {
                        values["weibo:webpage:description"] ||
                        values["description"] ||
                        values["twitter:description"];
+
+    // get site name
+    metadata.siteName = values["og:site_name"];
 
     return metadata;
   },
@@ -1462,17 +1494,17 @@ Readability.prototype = {
     this._removeNodes(e.getElementsByTagName(tag), function(element) {
       // Allow youtube and vimeo videos through as people usually want to see those.
       if (isEmbed) {
-        var attributeValues = [].map.call(element.attributes, function(attr) {
-          return attr.value;
-        }).join("|");
-
         // First, check the elements attributes to see if any of them contain youtube or vimeo
-        if (this.REGEXPS.videos.test(attributeValues))
-          return false;
+        for (var i = 0; i < element.attributes.length; i++) {
+          if (this.REGEXPS.videos.test(element.attributes[i].value)) {
+            return false;
+          }
+        }
 
-        // Then check the elements inside this element for the same.
-        if (this.REGEXPS.videos.test(element.innerHTML))
+        // For embed with <object> tag, check inner HTML as well.
+        if (element.tagName === "object" && this.REGEXPS.videos.test(element.innerHTML)) {
           return false;
+        }
       }
 
       return true;
@@ -1590,6 +1622,39 @@ Readability.prototype = {
     }
   },
 
+  /* convert images and figures that have properties like data-src into images that can be loaded without JS */
+  _fixLazyImages: function (root) {
+    this._forEachNode(this._getAllNodesWithTag(root, ["img", "picture", "figure"]), function (elem) {
+      // also check for "null" to work around https://github.com/jsdom/jsdom/issues/2580
+      if ((!elem.src && (!elem.srcset || elem.srcset == "null")) || elem.className.toLowerCase().indexOf("lazy") !== -1) {
+        for (var i = 0; i < elem.attributes.length; i++) {
+          var attr = elem.attributes[i];
+          if (attr.name === "src" || attr.name === "srcset") {
+            continue;
+          }
+          var copyTo = null;
+          if (/\.(jpg|jpeg|png|webp)\s+\d/.test(attr.value)) {
+            copyTo = "srcset";
+          } else if (/^\s*\S+\.(jpg|jpeg|png|webp)\S*\s*$/.test(attr.value)) {
+            copyTo = "src";
+          }
+          if (copyTo) {
+            //if this is an img or picture, set the attribute directly
+            if (elem.tagName === "IMG" || elem.tagName === "PICTURE") {
+              elem.setAttribute(copyTo, attr.value);
+            } else if (elem.tagName === "FIGURE" && !this._getAllNodesWithTag(elem, ["img", "picture"]).length) {
+              //if the item is a <figure> that does not contain an image or picture, create one and place it inside the figure
+              //see the nytimes-3 testcase for an example
+              var img = this._doc.createElement("img");
+              img.setAttribute(copyTo, attr.value);
+              elem.appendChild(img);
+            }
+          }
+        }
+      }
+    });
+  },
+
   /**
    * Clean an element of all tags of type "tag" if they look fishy.
    * "Fishy" is an algorithm based on content length, classnames, link density, number of images & embeds, etc.
@@ -1608,11 +1673,16 @@ Readability.prototype = {
     //
     // TODO: Consider taking into account original contentScore here.
     this._removeNodes(e.getElementsByTagName(tag), function(node) {
-      // First check if we're in a data table, in which case don't remove us.
+      // First check if this node IS data table, in which case don't remove it.
       var isDataTable = function(t) {
         return t._readabilityDataTable;
       };
 
+      if (tag === "table" && isDataTable(node)) {
+        return false;
+      }
+
+      // Next check if we're inside a data table, in which case don't remove it as well.
       if (this._hasAncestorTag(node, "table", -1, isDataTable)) {
         return false;
       }
@@ -1636,10 +1706,25 @@ Readability.prototype = {
         var input = node.getElementsByTagName("input").length;
 
         var embedCount = 0;
-        var embeds = node.getElementsByTagName("embed");
-        for (var ei = 0, il = embeds.length; ei < il; ei += 1) {
-          if (!this.REGEXPS.videos.test(embeds[ei].src))
-            embedCount += 1;
+        var embeds = this._concatNodeLists(
+          node.getElementsByTagName("object"),
+          node.getElementsByTagName("embed"),
+          node.getElementsByTagName("iframe"));
+
+        for (var i = 0; i < embeds.length; i++) {
+          // If this embed has attribute that matches video regex, don't delete it.
+          for (var j = 0; j < embeds[i].attributes.length; j++) {
+            if (this.REGEXPS.videos.test(embeds[i].attributes[j].value)) {
+              return false;
+            }
+          }
+
+          // For embed with <object> tag, check inner HTML as well.
+          if (embeds[i].tagName === "object" && this.REGEXPS.videos.test(embeds[i].innerHTML)) {
+            return false;
+          }
+
+          embedCount++;
         }
 
         var linkDensity = this._getLinkDensity(node);
@@ -1660,17 +1745,17 @@ Readability.prototype = {
   },
 
   /**
-   * Clean out elements whose id/class combinations match specific string.
+   * Clean out elements that match the specified conditions
    *
    * @param Element
-   * @param RegExp match id/class combination.
+   * @param Function determines whether a node should be removed
    * @return void
    **/
-  _cleanMatchedNodes: function(e, regex) {
+  _cleanMatchedNodes: function(e, filter) {
     var endOfSearchMarkerNode = this._getNextNode(e, true);
     var next = this._getNextNode(e);
     while (next && next != endOfSearchMarkerNode) {
-      if (regex.test(next.className + " " + next.id)) {
+      if (filter.call(this, next, next.className + " " + next.id)) {
         next = this._removeAndGetNext(next);
       } else {
         next = this._getNextNode(next);
@@ -1701,66 +1786,9 @@ Readability.prototype = {
   },
 
   _isProbablyVisible: function(node) {
-    return (!node.style || node.style.display != "none") && !node.hasAttribute("hidden");
-  },
-
-  /**
-   * Decides whether or not the document is reader-able without parsing the whole thing.
-   *
-   * @return boolean Whether or not we suspect parse() will suceeed at returning an article object.
-   */
-  isProbablyReaderable: function(helperIsVisible) {
-    var nodes = this._getAllNodesWithTag(this._doc, ["p", "pre"]);
-
-    // Get <div> nodes which have <br> node(s) and append them into the `nodes` variable.
-    // Some articles' DOM structures might look like
-    // <div>
-    //   Sentences<br>
-    //   <br>
-    //   Sentences<br>
-    // </div>
-    var brNodes = this._getAllNodesWithTag(this._doc, ["div > br"]);
-    if (brNodes.length) {
-      var set = new Set();
-      [].forEach.call(brNodes, function(node) {
-        set.add(node.parentNode);
-      });
-      nodes = [].concat.apply(Array.from(set), nodes);
-    }
-
-    if (!helperIsVisible) {
-      helperIsVisible = this._isProbablyVisible;
-    }
-
-    var score = 0;
-    // This is a little cheeky, we use the accumulator 'score' to decide what to return from
-    // this callback:
-    return this._someNode(nodes, function(node) {
-      if (helperIsVisible && !helperIsVisible(node))
-        return false;
-      var matchString = node.className + " " + node.id;
-
-      if (this.REGEXPS.unlikelyCandidates.test(matchString) &&
-          !this.REGEXPS.okMaybeItsACandidate.test(matchString)) {
-        return false;
-      }
-
-      if (node.matches && node.matches("li p")) {
-        return false;
-      }
-
-      var textContentLength = node.textContent.trim().length;
-      if (textContentLength < 140) {
-        return false;
-      }
-
-      score += Math.sqrt(textContentLength - 140);
-
-      if (score > 20) {
-        return true;
-      }
-      return false;
-    });
+    return (!node.style || node.style.display != "none")
+      && !node.hasAttribute("hidden")
+      && (!node.hasAttribute("aria-hidden") || node.getAttribute("aria-hidden") != "true");
   },
 
   /**
@@ -1819,6 +1847,7 @@ Readability.prototype = {
       textContent: textContent,
       length: textContent.length,
       excerpt: metadata.excerpt,
+      siteName: metadata.siteName || this._articleSiteName
     };
   }
 };
