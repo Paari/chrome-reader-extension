@@ -357,6 +357,7 @@
 img.dr-icons {
   width: 32px;
   height: 32px;
+  margin-right: 20px;
 }
 
 .rr-popup__action-wrapper {
@@ -373,6 +374,7 @@ img.dr-icons {
   box-shadow: none;
   text-align: center;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .dr-speed--toggle {

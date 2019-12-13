@@ -12,6 +12,7 @@ class App extends Component {
   state = {
     title: "",
     content: "",
+    contentWithoutStop: null,
     wrapperWidth: 800,
     readerView: true,
     theme: 0,
@@ -28,24 +29,27 @@ class App extends Component {
 
     this.setState({
       title: article.title,
-      content: fadeStopWords(article.content)
+      content: article.content
     });
 
     // load saved values from chrome storage
-    chrome.storage.sync.get(["theme", "sizeFont", "lineHeight", "fontWeight"], data => {
-      this.setState(state => {
-        return {
-          theme: isNaN(data.theme) ? state.theme : data.theme,
-          sizeFont: isNaN(data.sizeFont) ? state.sizeFont : data.sizeFont,
-          lineHeight: isNaN(data.lineHeight)
-            ? state.lineHeight
-            : data.lineHeight,
-          fontWeight: isNaN(data.fontWeight)
-            ? state.fontWeight
-            : data.fontWeight
-        };
-      });
-    });
+    chrome.storage.sync.get(
+      ["theme", "sizeFont", "lineHeight", "fontWeight"],
+      data => {
+        this.setState(state => {
+          return {
+            theme: isNaN(data.theme) ? state.theme : data.theme,
+            sizeFont: isNaN(data.sizeFont) ? state.sizeFont : data.sizeFont,
+            lineHeight: isNaN(data.lineHeight)
+              ? state.lineHeight
+              : data.lineHeight,
+            fontWeight: isNaN(data.fontWeight)
+              ? state.fontWeight
+              : data.fontWeight
+          };
+        });
+      }
+    );
   }
 
   closeReader() {
@@ -121,6 +125,17 @@ class App extends Component {
   }
 
   /**
+   * Fade the stop words from the main content
+   */
+  toggleStopWordFade() {
+    this.setState(prevState => {
+      return {
+        contentWithoutStop: prevState.contentWithoutStop === null ? fadeStopWords(prevState.content) : null
+      }
+    })
+  }
+
+  /**
    * Should it be bold or not
    * it just toggles values
    */
@@ -180,6 +195,11 @@ class App extends Component {
           ? chrome.runtime.getURL("images/icon-speed-light.png")
           : chrome.runtime.getURL("images/icon-speed.png");
 
+      const moreSpeedIcon =
+        this.state.theme === 2
+          ? chrome.runtime.getURL("images/icon-more-speed-light.png")
+          : chrome.runtime.getURL("images/icon-more-speed.png");
+
       return (
         <div
           className={`rr-app ${activeTheme} ${
@@ -213,6 +233,22 @@ class App extends Component {
                       title="Speed Reading"
                     />
                   </span>
+
+                  <span
+                    onClick={() => this.toggleStopWordFade()}
+                    className={
+                      this.state.contentWithoutStop !== null
+                        ? "dr-button--action dr-active dr-speed--toggle"
+                        : "dr-button--action dr-speed--toggle"
+                    }
+                  >
+                    <img
+                      src={moreSpeedIcon}
+                      className="dr-icons"
+                      title="Speed Reading"
+                    />
+                  </span>
+
                   <span
                     className="rr-font--update rr-dec"
                     onClick={() => this.decreaseFontSize()}
@@ -268,7 +304,7 @@ class App extends Component {
               }}
             >
               <h1>{this.state.title}</h1>
-              {ReactHtmlParser(this.state.content)}
+              {ReactHtmlParser(this.state.contentWithoutStop !== null ? this.state.contentWithoutStop : this.state.content)}
             </article>
           </section>
         </div>
