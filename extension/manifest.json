@@ -1,6 +1,6 @@
 {
 	"name": "Reeader - Minimal reader with speed reading",
-	"version": "1.1.2",
+	"version": "1.2.0",
 	"description": "A simple and minimal way to read articles faster.",
   "permissions": ["activeTab", "storage"],
   "background": {
