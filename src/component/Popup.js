@@ -15,14 +15,14 @@ export default class Popup extends Component {
             className="rr-popup__control dr-button--action"
             onClick={() => editLineHeight(false)}
           >
-            <img src={decLineHeightIcon} title="Decrease line height" />
+            <img src={decLineHeightIcon} title="Decrease line height" alt="" />
           </span>
 
           <span
             className="rr-popup__control dr-button--action"
             onClick={() => editLineHeight(true)}
           >
-            <img src={incLineHeightIcon} title="Increase line height" />
+            <img src={incLineHeightIcon} title="Increase line height" alt="" />
           </span>
         </div>
 
@@ -37,7 +37,7 @@ export default class Popup extends Component {
         </div>
 
         <div className="rr-popup__action-wrapper">
-          <img src={incLineHeightIcon} src={chrome.runtime.getURL('images/logo.png')} />
+          <img src={chrome.runtime.getURL('images/logo.png')} alt="" />
         </div>
       </div>
     )

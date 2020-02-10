@@ -231,6 +231,7 @@ class App extends Component {
                       src={speedIcon}
                       className="dr-icons"
                       title="Speed Reading"
+                      alt=""
                     />
                   </span>
 
@@ -246,6 +247,7 @@ class App extends Component {
                       src={moreSpeedIcon}
                       className="dr-icons"
                       title="Speed Reading"
+                      alt=""
                     />
                   </span>
 
