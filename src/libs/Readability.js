@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*eslint-env es6:false*/
 /*
  * Copyright (c) 2010 Arc90 Inc
@@ -77,7 +78,7 @@ function Readability(doc, options) {
         var msg = Array.prototype.map.call(arguments, function(x) {
           return (x && x.nodeName) ? logEl(x) : x;
         }).join(" ");
-        dump("Reader: (Readability) " + msg + "\n");
+        // dump("Reader: (Readability) " + msg + "\n");
       } else if (typeof console !== "undefined") {
         var args = ["Reader: (Readability) "].concat(arguments);
         console.log.apply(console, args);
