@@ -205,11 +205,11 @@
   }
 
     .rr-popup-toggle--button figure {
-      width: 6px;
-      height: 6px;
-      border-radius: 5px;
-      background: #303030;
-      margin: 3px 0;
+      width: 6px !important;
+      height: 6px !important;
+      border-radius: 5px !important;
+      background: #303030 !important;
+      margin: 3px 0 !important;
     }
 
     .theme-dark .rr-popup-toggle--button figure {
