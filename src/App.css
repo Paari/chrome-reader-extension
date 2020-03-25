@@ -24,7 +24,8 @@
     /* typography */
     .rr-app-wrapper p {
       font-size: 1em;
-      font-family: 'Open Sans', sans-serif;
+      margin-bottom: 1.8rem !important;
+      font-family: 'Open Sans', sans-serif !important;
     }
 
       .rr-app-wrapper p span.rr-fade {
