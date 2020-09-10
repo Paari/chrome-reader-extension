@@ -301,6 +301,26 @@
     color: #ffffff !important;
   }
 
+/* Focus mode */
+.rr-focus__wrapper {
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+}
+
+  .rr-focus__container {
+    width: 100px;
+    height: 40px;
+    background: yellow;
+    overflow: hidden;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+    .rr-word {
+      margin-right: 5px;
+    }
 
 /* speed reading style */
 .rr-speed .rr-content__wrapper > div {

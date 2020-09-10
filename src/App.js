@@ -23,7 +23,7 @@ class App extends Component {
     speedReading: false
   };
 
-  componentWillMount() {
+  componentDidMount() {
     var documentClone = document.cloneNode(true);
     var article = new Readability(documentClone).parse();
 
@@ -33,23 +33,23 @@ class App extends Component {
     });
 
     // load saved values from chrome storage
-    chrome.storage.sync.get(
-      ["theme", "sizeFont", "lineHeight", "fontWeight"],
-      data => {
-        this.setState(state => {
-          return {
-            theme: isNaN(data.theme) ? state.theme : data.theme,
-            sizeFont: isNaN(data.sizeFont) ? state.sizeFont : data.sizeFont,
-            lineHeight: isNaN(data.lineHeight)
-              ? state.lineHeight
-              : data.lineHeight,
-            fontWeight: isNaN(data.fontWeight)
-              ? state.fontWeight
-              : data.fontWeight
-          };
-        });
-      }
-    );
+    // chrome.storage.sync.get(
+    //   ["theme", "sizeFont", "lineHeight", "fontWeight"],
+    //   data => {
+    //     this.setState(state => {
+    //       return {
+    //         theme: isNaN(data.theme) ? state.theme : data.theme,
+    //         sizeFont: isNaN(data.sizeFont) ? state.sizeFont : data.sizeFont,
+    //         lineHeight: isNaN(data.lineHeight)
+    //           ? state.lineHeight
+    //           : data.lineHeight,
+    //         fontWeight: isNaN(data.fontWeight)
+    //           ? state.fontWeight
+    //           : data.fontWeight
+    //       };
+    //     });
+    //   }
+    // );
   }
 
   closeReader() {
@@ -190,21 +190,24 @@ class App extends Component {
         activeTheme = this.state.theme === 1 ? "theme-yellow" : "theme-dark";
       }
 
-      const speedIcon =
-        this.state.theme === 2
-          ? chrome.runtime.getURL("images/icon-speed-light.png")
-          : chrome.runtime.getURL("images/icon-speed.png");
+      // const speedIcon =
+      //   this.state.theme === 2
+      //     ? chrome.runtime.getURL("images/icon-speed-light.png")
+      //     : chrome.runtime.getURL("images/icon-speed.png");
 
-      const moreSpeedIcon =
-        this.state.theme === 2
-          ? chrome.runtime.getURL("images/icon-more-speed-light.png")
-          : chrome.runtime.getURL("images/icon-more-speed.png");
+      // const moreSpeedIcon =
+      //   this.state.theme === 2
+      //     ? chrome.runtime.getURL("images/icon-more-speed-light.png")
+      //     : chrome.runtime.getURL("images/icon-more-speed.png");
+
+      const speedIcon = "";
+      const moreSpeedIcon = "";
 
       return (
         <div
           className={`rr-app ${activeTheme} ${
             this.state.speedReading ? "rr-speed" : ""
-          }`}
+            }`}
         >
           <section
             className="rr-app-wrapper"
@@ -297,6 +300,28 @@ class App extends Component {
                 </div>
               </div>
             </header>
+
+            <article className="rr-focus__wrapper">
+              <div className="rr-focus__container">
+                <div>
+                  {
+                    ReactHtmlParser(
+                      this.state.content
+                        .replace(/(<([^>]+)>)/gi, "")
+                        .replace(/(^|<\/?[^>]+>|\s+)([^\s<]+)/g, '$1<span class="rr-word">$2</span>')
+                    )
+                  }
+                </div>
+              </div>
+            </article>
+
+
+            {
+              this.state.content
+                .replace(/(<([^>]+)>)/gi, "")
+                .split(' ').length
+            }
+
             <article
               className="rr-content__wrapper"
               style={{
