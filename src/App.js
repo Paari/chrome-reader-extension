@@ -7,6 +7,7 @@ import Readability from "./libs/Readability";
 import "./App.css";
 import Popup from "./component/Popup";
 import { fadeStopWords } from "./helpers/fadeStopWords";
+import Focus from "./component/Focus";
 
 class App extends Component {
   state = {
@@ -203,10 +204,27 @@ class App extends Component {
       const speedIcon = "";
       const moreSpeedIcon = "";
 
+      // strip all the html tags
+      // and wrap each word with a span
+      const textForFocus =
+        // ReactHtmlParser(
+        this.state.content
+          .replace(/(<([^>]+)>)/gi, "")
+          .trim()
+          .replace(/\s+/g, " ")
+          .split(' ')
+      // .replace(/(^|<\/?[^>]+>|\s+)([^\s<]+)/g, '$1<span class="rr-word">$2</span>')
+      // );
+
+      // total number of words
+      const totalWords =
+        this.state.content
+          .replace(/(<([^>]+)>)/gi, "")
+          .split(' ').length;
+
       return (
         <div
-          className={`rr-app ${activeTheme} ${
-            this.state.speedReading ? "rr-speed" : ""
+          className={`rr-app ${activeTheme} ${this.state.speedReading ? "rr-speed" : ""
             }`}
         >
           <section
@@ -302,25 +320,8 @@ class App extends Component {
             </header>
 
             <article className="rr-focus__wrapper">
-              <div className="rr-focus__container">
-                <div>
-                  {
-                    ReactHtmlParser(
-                      this.state.content
-                        .replace(/(<([^>]+)>)/gi, "")
-                        .replace(/(^|<\/?[^>]+>|\s+)([^\s<]+)/g, '$1<span class="rr-word">$2</span>')
-                    )
-                  }
-                </div>
-              </div>
+              <Focus content={textForFocus} />
             </article>
-
-
-            {
-              this.state.content
-                .replace(/(<([^>]+)>)/gi, "")
-                .split(' ').length
-            }
 
             <article
               className="rr-content__wrapper"

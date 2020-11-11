@@ -1,0 +1,36 @@
+/* Focus mode */
+.rr-focus__wrapper {
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+}
+  /* .rr-focus__slider {} */
+
+  .rr-focus__container {
+    width: 250px;
+    /* height: 40px; */
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+    .rr-word {
+      margin-right: 5px;
+    }
+    
+.rr-word {
+  opacity: 0.3;
+  display: inline-block;
+  line-height: 1.8;
+}
+
+.rr-word.active {
+  display: inline-block;
+  font-size: 3rem;
+  width: auto;
+  text-align: center;
+  opacity: 1;
+  transform: translateY(5px);
+  margin-left: 20px;
+  margin-right: 20px;
+}
