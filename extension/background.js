@@ -1,16 +1,21 @@
-chrome.browserAction.onClicked.addListener(function(tabs) {
+/*global chrome*/
+
+chrome.action.onClicked.addListener(function(tab) {
   // Add the reader container to the DOM
-  chrome.tabs.executeScript({
-    file: 'index.js'
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ['index.js']
   });
 
   // Inject styles
-  chrome.tabs.insertCSS({
-    file: 'main.css'
+  chrome.scripting.insertCSS({
+    target: { tabId: tab.id },
+    files: ['main.css']
   });
 
   // Inject reader script
-  chrome.tabs.executeScript(
-    {file: 'main.js'},
-  );
-})
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ['main.js']
+  });
+});
