@@ -1,16 +1,16 @@
 /*global chrome*/
 
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import parse from 'html-react-parser';
-import Readability from "./libs/Readability";
-import "./App.css";
-import Popup from "./component/Popup";
-import { fadeStopWords } from "./helpers/fadeStopWords";
+import Readability from './libs/Readability';
+import './App.css';
+import Popup from './component/Popup';
+import { fadeStopWords } from './helpers/fadeStopWords';
 
 class App extends Component {
   state = {
-    title: "",
-    content: "",
+    title: '',
+    content: '',
     contentWithoutStop: null,
     wrapperWidth: 800,
     readerView: true,
@@ -19,7 +19,7 @@ class App extends Component {
     lineHeight: 1.6,
     fontWeight: 400,
     popupMenu: false,
-    speedReading: false
+    speedReading: false,
   };
 
   componentWillMount() {
@@ -28,14 +28,14 @@ class App extends Component {
 
     this.setState({
       title: article.title,
-      content: article.content
+      content: article.content,
     });
 
     // load saved values from chrome storage
     chrome.storage.sync.get(
-      ["theme", "sizeFont", "lineHeight", "fontWeight"],
-      data => {
-        this.setState(state => {
+      ['theme', 'sizeFont', 'lineHeight', 'fontWeight'],
+      (data) => {
+        this.setState((state) => {
           return {
             theme: isNaN(data.theme) ? state.theme : data.theme,
             sizeFont: isNaN(data.sizeFont) ? state.sizeFont : data.sizeFont,
@@ -44,25 +44,25 @@ class App extends Component {
               : data.lineHeight,
             fontWeight: isNaN(data.fontWeight)
               ? state.fontWeight
-              : data.fontWeight
+              : data.fontWeight,
           };
         });
-      }
+      },
     );
   }
 
   closeReader() {
     this.setState({
-      readerView: false
+      readerView: false,
     });
 
     // remove scroll stop style from body
-    const bodyElement = document.getElementsByTagName("body");
-    bodyElement[0].removeAttribute("style");
+    const bodyElement = document.getElementsByTagName('body');
+    bodyElement[0].removeAttribute('style');
   }
 
   increaseFontSize() {
-    this.setState(state => {
+    this.setState((state) => {
       return { sizeFont: state.sizeFont + 1 };
     });
 
@@ -70,7 +70,7 @@ class App extends Component {
   }
 
   decreaseFontSize() {
-    this.setState(state => {
+    this.setState((state) => {
       return { sizeFont: state.sizeFont - 1 };
     });
 
@@ -83,14 +83,14 @@ class App extends Component {
    */
   toggleTheme(themeIndex) {
     this.setState({
-      theme: themeIndex
+      theme: themeIndex,
     });
     this.saveTheme(themeIndex);
   }
 
   // open and close popup options
   togglePopup() {
-    this.setState(state => {
+    this.setState((state) => {
       return { popupMenu: !state.popupMenu };
     });
   }
@@ -103,11 +103,11 @@ class App extends Component {
    */
   editLineHeight(action) {
     if (action) {
-      this.setState(state => {
+      this.setState((state) => {
         return { lineHeight: state.lineHeight + 0.1 };
       });
     } else {
-      this.setState(state => {
+      this.setState((state) => {
         return { lineHeight: state.lineHeight - 0.1 };
       });
     }
@@ -116,9 +116,9 @@ class App extends Component {
   }
 
   toggleSpeedReading() {
-    this.setState(state => {
+    this.setState((state) => {
       return {
-        speedReading: !state.speedReading
+        speedReading: !state.speedReading,
       };
     });
   }
@@ -127,11 +127,14 @@ class App extends Component {
    * Fade the stop words from the main content
    */
   toggleStopWordFade() {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
-        contentWithoutStop: prevState.contentWithoutStop === null ? fadeStopWords(prevState.content) : null
-      }
-    })
+        contentWithoutStop:
+          prevState.contentWithoutStop === null
+            ? fadeStopWords(prevState.content)
+            : null,
+      };
+    });
   }
 
   /**
@@ -139,12 +142,12 @@ class App extends Component {
    * it just toggles values
    */
   toggleFontWeight() {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       const status = prevState.fontWeight === 600;
       const fontWeightValue = status ? 400 : 600;
       this.saveFontWeight(fontWeightValue); // save to chrom storage
       return {
-        fontWeight: fontWeightValue
+        fontWeight: fontWeightValue,
       };
     });
   }
@@ -183,26 +186,26 @@ class App extends Component {
 
   render() {
     if (this.state.readerView) {
-      let activeTheme = "theme-white";
+      let activeTheme = 'theme-white';
       // if the theme is not white
       if (this.state.theme > 0) {
-        activeTheme = this.state.theme === 1 ? "theme-yellow" : "theme-dark";
+        activeTheme = this.state.theme === 1 ? 'theme-yellow' : 'theme-dark';
       }
 
       const speedIcon =
         this.state.theme === 2
-          ? chrome.runtime.getURL("images/icon-speed-light.png")
-          : chrome.runtime.getURL("images/icon-speed.png");
+          ? chrome.runtime.getURL('images/icon-speed-light.png')
+          : chrome.runtime.getURL('images/icon-speed.png');
 
       const moreSpeedIcon =
         this.state.theme === 2
-          ? chrome.runtime.getURL("images/icon-more-speed-light.png")
-          : chrome.runtime.getURL("images/icon-more-speed.png");
+          ? chrome.runtime.getURL('images/icon-more-speed-light.png')
+          : chrome.runtime.getURL('images/icon-more-speed.png');
 
       return (
         <div
           className={`rr-app ${activeTheme} ${
-            this.state.speedReading ? "rr-speed" : ""
+            this.state.speedReading ? 'rr-speed' : ''
           }`}
         >
           <section
@@ -222,8 +225,8 @@ class App extends Component {
                     onClick={() => this.toggleSpeedReading()}
                     className={
                       this.state.speedReading
-                        ? "dr-button--action dr-active dr-speed--toggle"
-                        : "dr-button--action dr-speed--toggle"
+                        ? 'dr-button--action dr-active dr-speed--toggle'
+                        : 'dr-button--action dr-speed--toggle'
                     }
                   >
                     <img
@@ -238,8 +241,8 @@ class App extends Component {
                     onClick={() => this.toggleStopWordFade()}
                     className={
                       this.state.contentWithoutStop !== null
-                        ? "dr-button--action dr-active dr-speed--toggle"
-                        : "dr-button--action dr-speed--toggle"
+                        ? 'dr-button--action dr-active dr-speed--toggle'
+                        : 'dr-button--action dr-speed--toggle'
                     }
                   >
                     <img
@@ -287,7 +290,7 @@ class App extends Component {
                     {this.state.popupMenu && (
                       <Popup
                         theme={this.state.theme}
-                        editLineHeight={action => this.editLineHeight(action)}
+                        editLineHeight={(action) => this.editLineHeight(action)}
                         toggleFontWeight={() => this.toggleFontWeight()}
                         fontWeight={this.state.fontWeight === 600}
                       />
@@ -301,11 +304,15 @@ class App extends Component {
               style={{
                 fontSize: `${this.state.sizeFont}px`,
                 lineHeight: `${this.state.lineHeight}em`,
-                fontWeight: this.state.fontWeight
+                fontWeight: this.state.fontWeight,
               }}
             >
               <h1>{this.state.title}</h1>
-              {parse(this.state.contentWithoutStop !== null ? this.state.contentWithoutStop : this.state.content)}
+              {parse(
+                this.state.contentWithoutStop !== null
+                  ? this.state.contentWithoutStop
+                  : this.state.content,
+              )}
             </article>
           </section>
         </div>

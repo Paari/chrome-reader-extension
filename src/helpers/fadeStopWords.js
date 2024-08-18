@@ -1,4 +1,4 @@
-import { stopWords } from "../libs/stopWords";
+import { stopWords } from '../libs/stopWords';
 
 /**
  * Takes in the unparsed html as string
@@ -7,13 +7,13 @@ import { stopWords } from "../libs/stopWords";
  * @param {string} content - content for finding and fading stop words
  * @return {string}
  */
-export const fadeStopWords = content => {
-  let fadedContent = content.split(" ");
+export const fadeStopWords = (content) => {
+  let fadedContent = content.split(' ');
   fadedContent.forEach((word, index) => {
     if (stopWords.includes(word.toLowerCase())) {
       fadedContent[index] = `<span class="rr-fade">${word}</span>`;
     }
   });
 
-  return fadedContent.join(" ");
+  return fadedContent.join(' ');
 };

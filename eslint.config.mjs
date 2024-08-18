@@ -5,7 +5,10 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 
 
 export default [
-  {files: ["**/*.{js,mjs,cjs,jsx}"]},
+  {
+    files: ["**/*.{js,mjs,cjs,jsx}"],
+    ignores: ["src/libs/Readability.js"],
+  },
   {languageOptions: { globals: globals.browser }},
   pluginJs.configs.recommended,
   pluginReact.configs.flat.recommended,
@@ -13,6 +16,6 @@ export default [
   {
     rules: {
       "prettier/prettier": ["error", { "endOfLine": "auto" }]
-    }
-  }
+    },
+  },
 ];

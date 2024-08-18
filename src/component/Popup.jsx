@@ -4,8 +4,14 @@ import React, { Component } from 'react';
 export default class Popup extends Component {
   render() {
     const { theme, editLineHeight, toggleFontWeight, fontWeight } = this.props;
-    const incLineHeightIcon = theme === 2 ? chrome.runtime.getURL('images/icon-lineheight-inc-light.png') : chrome.runtime.getURL('images/icon-lineheight-inc.png');
-    const decLineHeightIcon = theme === 2 ? chrome.runtime.getURL('images/icon-lineheight-dec-light.png') : chrome.runtime.getURL('images/icon-lineheight-dec.png');
+    const incLineHeightIcon =
+      theme === 2
+        ? chrome.runtime.getURL('images/icon-lineheight-inc-light.png')
+        : chrome.runtime.getURL('images/icon-lineheight-inc.png');
+    const decLineHeightIcon =
+      theme === 2
+        ? chrome.runtime.getURL('images/icon-lineheight-dec-light.png')
+        : chrome.runtime.getURL('images/icon-lineheight-dec.png');
 
     return (
       <div className="rr-popup__wrapper">
@@ -30,9 +36,11 @@ export default class Popup extends Component {
         <div className="rr-popup__action-wrapper">
           <span
             onClick={() => toggleFontWeight()}
-            className={fontWeight ? 'rr-popup__toggle active' : 'rr-popup__toggle'}
+            className={
+              fontWeight ? 'rr-popup__toggle active' : 'rr-popup__toggle'
+            }
           >
-            {fontWeight ? 'Unbold it 😦' :'Make it bold 🤟'}
+            {fontWeight ? 'Unbold it 😦' : 'Make it bold 🤟'}
           </span>
         </div>
 
@@ -40,6 +48,6 @@ export default class Popup extends Component {
           <img src={chrome.runtime.getURL('images/logo.png')} alt="" />
         </div>
       </div>
-    )
+    );
   }
 }
