@@ -1,8 +1,7 @@
 /*global chrome*/
-/*global document*/
 
 import React, { Component } from "react";
-import ReactHtmlParser from "react-html-parser";
+import parse from 'html-react-parser';
 import Readability from "./libs/Readability";
 import "./App.css";
 import Popup from "./component/Popup";
@@ -306,7 +305,7 @@ class App extends Component {
               }}
             >
               <h1>{this.state.title}</h1>
-              {ReactHtmlParser(this.state.contentWithoutStop !== null ? this.state.contentWithoutStop : this.state.content)}
+              {parse(this.state.contentWithoutStop !== null ? this.state.contentWithoutStop : this.state.content)}
             </article>
           </section>
         </div>
